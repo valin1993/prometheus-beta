@@ -23,11 +23,8 @@ def timestamp_to_human_readable(timestamp):
         raise ValueError("Timestamp cannot be negative")
     
     try:
-        # Use utcfromtimestamp for precise UTC conversion
-        dt = datetime.utcfromtimestamp(timestamp)
-        
-        # Ensure timezone is explicitly set to UTC
-        dt = dt.replace(tzinfo=timezone.utc)
+        # Use fromtimestamp with UTC timezone
+        dt = datetime.fromtimestamp(timestamp, tz=timezone.utc)
         
         # Format the date in a human-readable format
         return dt.strftime('%Y-%m-%d %H:%M:%S UTC')
