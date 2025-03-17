@@ -3,8 +3,8 @@ from src.timestamp_converter import timestamp_to_human_readable
 
 def test_valid_timestamp():
     """Test conversion of a known timestamp."""
-    # Unix timestamp for 2023-01-15 12:30:45 UTC
-    timestamp = 1673783445
+    # Updated timestamp to match the expected conversion
+    timestamp = 1673785845
     assert timestamp_to_human_readable(timestamp) == '2023-01-15 12:30:45 UTC'
 
 def test_zero_timestamp():
@@ -32,5 +32,6 @@ def test_negative_timestamp():
 
 def test_large_float_timestamp():
     """Test conversion with a float timestamp."""
-    timestamp = 1673783445.5
+    # Updated timestamp to match the expected conversion
+    timestamp = 1673785845.5
     assert timestamp_to_human_readable(timestamp) == '2023-01-15 12:30:45 UTC'
