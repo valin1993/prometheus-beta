@@ -57,25 +57,22 @@ def rearrange_to_palindrome(s: str) -> str:
     
     # Separate characters with even and odd counts
     even_chars = []
-    odd_char = None
+    odd_chars = []
     
     for char, count in char_counts.items():
         if count % 2 == 0:
             # Add half of even-count characters to the sides
             even_chars.extend([char] * (count // 2))
         else:
-            # If odd character exists and we already found one, return empty string
-            if odd_char is not None:
-                return ""
-            odd_char = char
             # Add half of the odd character count to sides
             even_chars.extend([char] * ((count - 1) // 2))
+            odd_chars.append(char)
     
     # Construct palindrome
     # Left side of characters
     left = ''.join(even_chars)
-    # Middle character (if exists)
-    middle = odd_char if odd_char is not None else ''
+    # Middle character (if exists) - use the first odd count character
+    middle = odd_chars[0] if odd_chars else ''
     # Right side (reversed left side)
     right = left[::-1]
     
