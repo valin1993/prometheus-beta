@@ -83,4 +83,13 @@ def rearrange_to_palindrome(s: str) -> str:
     # Choose the lexicographically smallest middle character if multiple exist
     middle = (min(middle_chars) if middle_chars else '')
     
-    return left + middle + right
+    # Add any remaining characters evenly
+    result = left + middle + right
+    
+    # If result is shorter than original, ensure same character count
+    if len(result) < len(s):
+        remaining_chars = sorted(set(s) - set(result))
+        if remaining_chars:
+            result += remaining_chars[0]
+    
+    return result
