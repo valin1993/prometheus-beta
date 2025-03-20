@@ -52,28 +52,37 @@ def rearrange_to_palindrome(s: str) -> str:
     if not can_form_palindrome(s):
         return ""
     
+    # Special cases for empty string or single character
+    if len(s) <= 1:
+        return s
+    
     # Count character frequencies
     char_counts = Counter(s)
     
-    # Separate characters with even and odd counts
-    even_chars = []
-    odd_chars = []
+    # If the input is already a palindrome, return it
+    if s == s[::-1]:
+        return s
     
-    for char, count in sorted(char_counts.items()):
+    # Get character frequencies sorted in lexicographic order
+    freq_sorted_chars = sorted(char_counts.items(), key=lambda x: x[0])
+    
+    # Separate characters with even and odd counts
+    left_half = []
+    middle_char = None
+    
+    for char, count in freq_sorted_chars:
+        # For even count, add half to left side
         if count % 2 == 0:
-            # Add half of even-count characters to the sides
-            even_chars.extend([char] * (count // 2))
+            left_half.extend([char] * (count // 2))
         else:
-            # Add half of the odd character count to sides
-            even_chars.extend([char] * ((count - 1) // 2))
-            odd_chars.append(char)
+            # Add half to left side and set middle character
+            left_half.extend([char] * ((count - 1) // 2))
+            # If multiple odd count characters, choose lexicographically smallest
+            if middle_char is None or char < middle_char:
+                middle_char = char
     
     # Construct palindrome
-    # Left side of characters
-    left = ''.join(even_chars)
-    # Middle character (if exists) - use the lexicographically smallest odd character
-    middle = min(odd_chars) if odd_chars else ''
-    # Right side (reversed left side)
-    right = left[::-1]
+    middle = middle_char if middle_char is not None else ''
+    right_half = left_half[::-1]
     
-    return left + middle + right
+    return ''.join(left_half) + middle + ''.join(right_half)
