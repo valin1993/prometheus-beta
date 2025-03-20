@@ -59,7 +59,7 @@ def rearrange_to_palindrome(s: str) -> str:
     even_chars = []
     odd_chars = []
     
-    for char, count in char_counts.items():
+    for char, count in sorted(char_counts.items()):
         if count % 2 == 0:
             # Add half of even-count characters to the sides
             even_chars.extend([char] * (count // 2))
@@ -71,8 +71,8 @@ def rearrange_to_palindrome(s: str) -> str:
     # Construct palindrome
     # Left side of characters
     left = ''.join(even_chars)
-    # Middle character (if exists) - use the first odd count character
-    middle = odd_chars[0] if odd_chars else ''
+    # Middle character (if exists) - use the lexicographically smallest odd character
+    middle = min(odd_chars) if odd_chars else ''
     # Right side (reversed left side)
     right = left[::-1]
     
