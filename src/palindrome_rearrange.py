@@ -59,22 +59,29 @@ def rearrange_to_palindrome(s: str) -> str:
     # Count character frequencies
     char_counts = Counter(s)
     
-    # Prepare the symmetrical arrangement
-    left = []
-    middle = ""
+    # Identify the order of characters
+    chars_sorted = sorted(char_counts.keys())
     
-    # Sort characters to ensure consistent output
-    for char, count in sorted(char_counts.items()):
-        # Handle even count characters fully
+    # Prepare components of palindrome
+    left_chars = []
+    middle_char = ""
+    
+    # Arrange characters 
+    for char in chars_sorted:
+        count = char_counts[char]
+        
+        # Add half of even count characters to left side
         if count % 2 == 0:
-            left.extend([char] * (count // 2))
+            left_chars.extend([char] * (count // 2))
         else:
-            # Add most characters to the sides, leave one for the middle
-            left.extend([char] * ((count - 1) // 2))
-            # Use the smallest character for the middle
-            if not middle:
-                middle = char
+            # Add part of odd count chars to left
+            left_chars.extend([char] * ((count - 1) // 2))
+            # Use the first odd count char as middle
+            if not middle_char:
+                middle_char = char
     
-    # Construct palindrome
+    # Create palindrome
+    left = ''.join(left_chars)
     right = left[::-1]
-    return ''.join(left) + middle + ''.join(right)
+    
+    return left + middle_char + right
