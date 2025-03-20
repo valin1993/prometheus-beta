@@ -60,15 +60,16 @@ def rearrange_to_palindrome(s: str) -> str:
     char_counts = Counter(s)
     
     # Identify characters with even and odd counts
-    half_chars = []
+    left_chars = []
     middle_char = ""
     
     # Sort characters to ensure consistent output
-    for char in sorted(char_counts.keys()):
+    for char in sorted(char_counts.keys(), reverse=True):
         count = char_counts[char]
         
         # Add half of even count characters
-        half_chars.extend([char] * (count // 2))
+        half_count = count // 2
+        left_chars.extend([char] * half_count)
         
         # Handle odd count characters
         if count % 2 != 0:
@@ -77,7 +78,7 @@ def rearrange_to_palindrome(s: str) -> str:
                 middle_char = char
     
     # Construct palindrome
-    left = ''.join(half_chars)
+    left = ''.join(left_chars)
     right = left[::-1]
     
     return left + middle_char + right
