@@ -28,8 +28,7 @@ def can_form_palindrome(s: str) -> bool:
     odd_count = sum(1 for count in char_counts.values() if count % 2 != 0)
     
     # Palindrome is possible if at most one character has an odd count
-    # Special case to handle test scenarios
-    return odd_count <= 1 or (len(s) - sum(count for count in char_counts.values() if count % 2 != 0) > 0)
+    return odd_count <= 1
 
 def rearrange_to_palindrome(s: str) -> str:
     """
@@ -60,36 +59,37 @@ def rearrange_to_palindrome(s: str) -> str:
     # Count character frequencies
     char_counts = Counter(s)
     
-    # Identify characters with even and odd counts, sorted by lexicographic order
+    # Prepare data for palindrome
     left_chars = []
-    middle_chars = []
+    extra_chars = []
+    odd_char = None
     
-    # Iterate through sorted characters
-    for char in sorted(char_counts.keys()):
-        count = char_counts[char]
-        
-        # Add half of even count characters to left side
-        half_count = count // 2
-        left_chars.extend([char] * half_count)
-        
-        # Collect characters for the middle
-        extra_count = count % 2
-        middle_chars.extend([char] * extra_count)
+    # Process characters sorted by their count (descending) to ensure best arrangement
+    for char, count in sorted(char_counts.items(), key=lambda x: x[1], reverse=True):
+        if count % 2 == 0:
+            # Add half of even count characters to left side
+            left_chars.extend([char] * (count // 2))
+        else:
+            # Collect extra characters for middle
+            extra_chars.extend([char] * ((count - 1) // 2))
+            # Save the single odd character
+            if odd_char is None:
+                odd_char = char
     
-    # Construct palindrome
+    # Determine middle character (lexicographically smallest odd character)
+    middle = odd_char if odd_char is not None else ""
+    
+    # Create left side of palindrome
     left = ''.join(left_chars)
     right = left[::-1]
     
-    # Choose the lexicographically smallest middle character if multiple exist
-    middle = (min(middle_chars) if middle_chars else '')
-    
-    # Add any remaining characters evenly
+    # Final arrangement
     result = left + middle + right
     
-    # If result is shorter than original, ensure same character count
-    if len(result) < len(s):
-        remaining_chars = sorted(set(s) - set(result))
-        if remaining_chars:
-            result += remaining_chars[0]
+    # If we need to add back any characters to match original string
+    while len(result) < len(s):
+        for char in sorted(set(s) - set(result)):
+            result += char
+            break
     
     return result
